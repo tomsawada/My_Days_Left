@@ -15,10 +15,8 @@ import 'package:days_left/ui_elements/constants.dart';
 // IF user has certain values, then main.dart should send directly over here. But if user doesn't have certain values,
 // then main.dart should send to the start of the process. When user recalculates, all variables are deleted,
 // hence applying option 2
-//TODO: Remember that the clock must then be re-calculated every day, Hence, the best way to do it is to calculate how
-// many days left the user has and set that date in the future as fixed, then substract today(). Then since today()
-// should change every day, the user should see the clock coming down daily.
-//TODO: see how a clock would work in terms of setState.
+//TODO: deathDate and days should be sored locally, since the app will use them every time.
+// And if the user closes the app and then re-opens, the calculation must be able to continue running.
 
 enum Option { recalculate }
 
@@ -39,6 +37,22 @@ class _DaysLeftState extends State<DaysLeft> {
   DateTime deathDate;
   double days;
   _DaysLeftState({this.deathDate, this.days});
+
+  int _daysLeft;
+  Timer _everysecond;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _daysLeft = deathDate.difference(DateTime.now()).inDays.toInt();
+
+    _everysecond = Timer.periodic(Duration(days: 1), (Timer t) {
+      setState(() {
+        _daysLeft = deathDate.difference(DateTime.now()).inDays.toInt();
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,25 +89,20 @@ class _DaysLeftState extends State<DaysLeft> {
         child: CircularPercentIndicator(
           radius: 200.0,
           lineWidth: 4.0,
-          percent:
-              // (DateTime.now().second) / (60),
-              (days /
-                  (days +
-                      deathDate.difference(DateTime.now()).inDays.toDouble())),
+          percent: (days / (days + _daysLeft)),
           backgroundColor: Colors.transparent,
           progressColor: Color(0xFFa4c2f4),
           center: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                f.format(deathDate.difference(DateTime.now()).inDays.toInt()),
+                (f.format(_daysLeft)).toString(),
                 style: kDaysCounterTextStyle,
               ),
               Text(
                 'Days left',
                 style: kDaysLeftTextStyle,
               ),
-              Text('After Some time ${DateTime.now().second}'),
             ],
           ),
         ),

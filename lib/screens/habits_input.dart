@@ -193,8 +193,8 @@ class _HabitsInputState extends State<HabitsInput> {
               double lifeExpectancyAfterHabits =
                   calculateLifeExpectancyAfterHabits();
 
-              int daysLeft = (lifeExpectancyAfterHabits * 365.35).toInt();
-              var deathDate = DateTime.now().add(Duration(days: daysLeft));
+              int remainingDays = (lifeExpectancyAfterHabits * 365.35).toInt();
+              var deathDate = DateTime.now().add(Duration(days: remainingDays));
 
               // Print validations
               // print(
@@ -211,11 +211,10 @@ class _HabitsInputState extends State<HabitsInput> {
               print(
                   'Because of my habits my life expectation is now $lifeExpectancyAfterHabits');
               print('I have been alive $days days');
-              print('I will live another $daysLeft days');
+              print('I will live another $remainingDays days');
               print(deathDate);
               print(deathDate.difference(DateTime.now()).inDays);
 
-              //TODO: Turn lifeExpectancyAfterHabits() into daysLeft and daysPassed. With that, get the percentage of daysPassed to use as input in the next screen.
               Navigator.push(
                 context,
                 MaterialPageRoute(
