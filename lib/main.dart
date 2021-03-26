@@ -2,8 +2,6 @@
 import 'package:flutter/material.dart';
 //IMPORT SCREENS
 import 'package:days_left/screens/days_left.dart';
-import 'package:days_left/screens/habits_input.dart';
-import 'package:days_left/screens/health_input.dart';
 import 'package:days_left/screens/myself_input.dart';
 
 void main() {

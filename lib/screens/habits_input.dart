@@ -1,5 +1,7 @@
 //IMPORT MATERIAL PACKAGES
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 //IMPORT SCREENS
 import 'days_left.dart';
 //IMPORT UI ELEMENTS
@@ -28,6 +30,11 @@ class _HabitsInputState extends State<HabitsInput> {
   int exercise = 3;
   int drink = 2;
   int smoke = 20;
+
+  saveLocalData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setDouble('daysLocal', days);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -208,13 +215,13 @@ class _HabitsInputState extends State<HabitsInput> {
               //     'My life will get shorten by ${smokeLifeCalculator()} years because of smoking');
               // print(
               //     'my drinking will affect my life by ${drinkLifeCalculator()} years');
-              print(
-                  'Because of my habits my life expectation is now $lifeExpectancyAfterHabits');
+              // print(
+              //     'Because of my habits my life expectation is now $lifeExpectancyAfterHabits');
               print('I have been alive $days days');
-              print('I will live another $remainingDays days');
-              print(deathDate);
-              print(deathDate.difference(DateTime.now()).inDays);
-
+              // print('I will live another $remainingDays days');
+              // print(deathDate);
+              // print(deathDate.difference(DateTime.now()).inDays);
+              saveLocalData();
               Navigator.push(
                 context,
                 MaterialPageRoute(

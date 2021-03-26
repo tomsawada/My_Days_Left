@@ -294,17 +294,17 @@ class _HealthInputState extends State<HealthInput> {
                     calculateLifeExpectancyAfterHealth();
 
                 //Print Validations
-                print('I am $selectedDiabetes');
-                print(
-                    'I am expected to live another $baseLifeExpectancy years');
-                print('My gender is $selectedGender');
-
-                print(
-                    'My BMI is ${switchMetric ? calc.calculateBmiMetric() : calc.calculateBmiImperial()}');
-                print(
-                    'My BMI result is giving me ${calc.resultMaleBMI()} years');
-                print(
-                    'My lifeExpectancyAfterHealth is now $lifeExpectancyAfterHealth');
+                // print('I am $selectedDiabetes');
+                // print(
+                //     'I am expected to live another $baseLifeExpectancy years');
+                // print('My gender is $selectedGender');
+                //
+                // print(
+                //     'My BMI is ${switchMetric ? calc.calculateBmiMetric() : calc.calculateBmiImperial()}');
+                // print(
+                //     'My BMI result is giving me ${calc.resultMaleBMI()} years');
+                // print(
+                //     'My lifeExpectancyAfterHealth is now $lifeExpectancyAfterHealth');
 
                 Navigator.push(
                   context,
@@ -411,47 +411,3 @@ class _HealthInputState extends State<HealthInput> {
     });
   }
 }
-
-// Row(
-//   mainAxisAlignment: MainAxisAlignment.center,
-//   children: <Widget>[
-//     RoundIconButton(
-//       icon: FontAwesomeIcons.minus,
-//       onPressed: () {
-//         setState(() {
-//           weight--;
-//         });
-//       },
-//     ),
-//     SizedBox(width: 10.0),
-//     RoundIconButton(
-//       icon: FontAwesomeIcons.plus,
-//       onPressed: () {
-//         setState(() {
-//           weight++;
-//         });
-//       },
-//     ),
-//   ],
-// ),
-
-// Row(
-//   mainAxisAlignment: MainAxisAlignment.center,
-//   children: <Widget>[
-//     RoundIconButton(
-//         icon: FontAwesomeIcons.minus,
-//         onPressed: () {
-//           setState(() {
-//             height--;
-//           });
-//         }),
-//     SizedBox(width: 10.0),
-//     RoundIconButton(
-//         icon: FontAwesomeIcons.plus,
-//         onPressed: () {
-//           setState(() {
-//             height++;
-//           });
-//         })
-//   ],
-// ),

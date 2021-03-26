@@ -1,7 +1,6 @@
 //IMPORT MATERIAL PACKAGES
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'dart:math';
 import 'dart:io' show Platform;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 //IMPORT SCREENS
@@ -82,7 +81,6 @@ class _MyselfInputState extends State<MyselfInput> {
       onSelectedItemChanged: (selectedIndex) {
         setState(() {
           selectedCountry = countriesList[selectedIndex];
-          print(selectedCountry);
         });
       },
       children: pickerItems,
@@ -220,11 +218,11 @@ class _MyselfInputState extends State<MyselfInput> {
                     });
               } else {
                 //Print Validations
-                print('Since I was born $days have passed');
-                print('My age is ${days / 365.25}');
-                print(
-                    'I am expected to live another $baseLifeExpectancy years');
-                print('I am a $selectedGender');
+                // print('Since I was born $days have passed');
+                // print('My age is ${days / 365.25}');
+                // print(
+                //     'I am expected to live another $baseLifeExpectancy years');
+                // print('I am a $selectedGender');
                 //Going to the next screen
 
                 Navigator.push(
