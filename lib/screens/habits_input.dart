@@ -31,7 +31,36 @@ class _HabitsInputState extends State<HabitsInput> {
   int drink = 2;
   int smoke = 20;
 
-  saveLocalData() async {
+  exerciseLifeCalculator() {
+    return (((exercise * 2 * 52) / 24) * lifeExpectancyAfterHealth) / 365.25;
+  }
+
+  smokeLifeCalculator() {
+    return ((smoke * (-12) * 336) * lifeExpectancyAfterHealth) / 525600;
+  }
+
+  double drinkLifeCalculator() {
+    if (drink == 0) {
+      return 0;
+    } else if (drink <= 2) {
+      return 1.15;
+    } else if (drink <= 4) {
+      return 0;
+    } else if (drink <= 7) {
+      return 0.9;
+    } else {
+      return 0.8;
+    }
+  }
+
+  calculateLifeExpectancyAfterHabits() {
+    return (lifeExpectancyAfterHealth +
+            exerciseLifeCalculator() +
+            smokeLifeCalculator()) *
+        drinkLifeCalculator();
+  }
+
+  saveLocalDaysData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setDouble('daysLocal', days);
   }
@@ -165,63 +194,24 @@ class _HabitsInputState extends State<HabitsInput> {
           BottomButton(
             buttonTitle: 'CALCULATE',
             onTap: () {
-              exerciseLifeCalculator() {
-                return (((exercise * 2 * 52) / 24) *
-                        lifeExpectancyAfterHealth) /
-                    365.25;
-              }
-
-              smokeLifeCalculator() {
-                return ((smoke * (-12) * 336) * lifeExpectancyAfterHealth) /
-                    525600;
-              }
-
-              double drinkLifeCalculator() {
-                if (drink == 0) {
-                  return 0;
-                } else if (drink <= 2) {
-                  return 1.15;
-                } else if (drink <= 4) {
-                  return 0;
-                } else if (drink <= 7) {
-                  return 0.9;
-                } else {
-                  return 0.8;
-                }
-              }
-
-              calculateLifeExpectancyAfterHabits() {
-                return (lifeExpectancyAfterHealth +
-                        exerciseLifeCalculator() +
-                        smokeLifeCalculator()) *
-                    drinkLifeCalculator();
-              }
+              exerciseLifeCalculator();
+              smokeLifeCalculator();
+              drinkLifeCalculator();
+              calculateLifeExpectancyAfterHabits();
 
               double lifeExpectancyAfterHabits =
                   calculateLifeExpectancyAfterHabits();
-
               int remainingDays = (lifeExpectancyAfterHabits * 365.35).toInt();
-              var deathDate = DateTime.now().add(Duration(days: remainingDays));
+              DateTime deathDate =
+                  DateTime.now().add(Duration(days: remainingDays));
+
+              saveLocalDaysData();
 
               // Print validations
-              // print(
-              //     'My life expectation after health is $lifeExpectancyAfterHealth');
-              // print('I exercise $exercise hours a week');
-              // print('I drink $drink drinks a week');
-              // print('I smoke $smoke cigarettes a day');
-              // print(
-              //     'I will extend my life by ${exerciseLifeCalculator()} by exercising');
-              // print(
-              //     'My life will get shorten by ${smokeLifeCalculator()} years because of smoking');
-              // print(
-              //     'my drinking will affect my life by ${drinkLifeCalculator()} years');
-              // print(
-              //     'Because of my habits my life expectation is now $lifeExpectancyAfterHabits');
               print('I have been alive $days days');
-              // print('I will live another $remainingDays days');
-              // print(deathDate);
-              // print(deathDate.difference(DateTime.now()).inDays);
-              saveLocalData();
+              print(deathDate);
+              print(deathDate.toIso8601String());
+
               Navigator.push(
                 context,
                 MaterialPageRoute(

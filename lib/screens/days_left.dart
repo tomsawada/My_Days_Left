@@ -16,7 +16,7 @@ import 'package:days_left/ui_elements/constants.dart';
 // IF user has certain values, then main.dart should send directly over here. But if user doesn't have certain values,
 // then main.dart should send to the start of the process. When user recalculates, all variables are deleted,
 // hence applying option 2
-//TODO: deathDate and days should be stored locally, since the app will use them every time.
+//TODO: deathDateLocal must be parse to continue with the calculation
 // And if the user closes the app and then re-opens, the calculation must be able to continue running.
 
 enum Option { recalculate }
@@ -40,13 +40,35 @@ class _DaysLeftState extends State<DaysLeft> {
   _DaysLeftState({this.deathDate, this.days});
 
   double daysLocal;
-  DateTime deathDateLocal;
+  String deathDateLocal;
   int _daysLeft;
   Timer _everysecond;
 
+  saveLocalDeathDateData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('deathDateLocal', deathDate.toIso8601String());
+  }
+
+  readAllLocalData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    daysLocal = prefs.getDouble('daysLocal');
+    print('I am in daysLeft and the locally saved is days $daysLocal');
+    deathDateLocal = prefs.getString('deathDateLocal');
+    print(
+        'I am in daysLeft and the locally saved deathDate is $deathDateLocal');
+  }
+
+  deleteLocalData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove('daysLocal');
+    prefs.remove('deathDateLocal');
+  }
+
   @override
   void initState() {
-    readLocalData();
+    saveLocalDeathDateData();
+    readAllLocalData();
+
     super.initState();
     _daysLeft = deathDate.difference(DateTime.now()).inDays.toInt();
     _everysecond = Timer.periodic(Duration(days: 1), (Timer t) {
@@ -56,15 +78,7 @@ class _DaysLeftState extends State<DaysLeft> {
     });
   }
 
-  readLocalData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    daysLocal = prefs.getDouble('daysLocal');
-    print('I am in daysLeft and the locally saved is $daysLocal');
-    // deathDateLocal = prefs.getInt('deathDateLocal');
-  }
-
   //https://medium.com/flutter-community/how-to-use-local-storage-in-flutter-3169e34f051b
-  // https://stackoverflow.com/questions/62424753/flutter-dart-shared-preferences-datetime-getting-converted
   //https://youtu.be/auspHSmtVII
   //https://pusher.com/tutorials/local-data-flutter
 
@@ -72,7 +86,7 @@ class _DaysLeftState extends State<DaysLeft> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+        // automaticallyImplyLeading: false,
         backgroundColor: Color(0xFF303030),
         elevation: 0,
         actions: <Widget>[
@@ -81,7 +95,8 @@ class _DaysLeftState extends State<DaysLeft> {
                   icon: Icon(Icons.more_horiz),
                   color: Colors.white,
                   onPressed: () {
-                    print(deathDate);
+                    print(DateTime.parse(deathDateLocal));
+                    // deleteLocalData();
                     showCupertinoModalPopup(
                       context: context,
                       builder: (context) => CupertinoRecalculate(),
