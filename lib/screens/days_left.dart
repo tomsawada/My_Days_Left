@@ -49,6 +49,8 @@ class _DaysLeftState extends State<DaysLeft> {
     prefs.setString('deathDateLocal', deathDate.toIso8601String());
   }
 
+
+
   readAllLocalData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     daysLocal = prefs.getDouble('daysLocal');
@@ -56,6 +58,7 @@ class _DaysLeftState extends State<DaysLeft> {
     deathDateLocal = prefs.getString('deathDateLocal');
     print(
         'I am in daysLeft and the locally saved deathDate is $deathDateLocal');
+
   }
 
   deleteLocalData() async {
@@ -64,23 +67,27 @@ class _DaysLeftState extends State<DaysLeft> {
     prefs.remove('deathDateLocal');
   }
 
+  //https://stackoverflow.com/questions/65124874/using-shared-preferences-in-initstate-of-widget-causes-error
+  //https://www.youtube.com/watch?v=ek8ZPdWj4Qo
+  //https://medium.com/flutterworld/why-future-builder-called-multiple-times-9efeeaf38ba2
+
   @override
   void initState() {
     saveLocalDeathDateData();
     readAllLocalData();
-
-    super.initState();
-    _daysLeft = deathDate.difference(DateTime.now()).inDays.toInt();
-    _everysecond = Timer.periodic(Duration(days: 1), (Timer t) {
+    // print(DateTime.parse(deathDateLocal).difference(DateTime.now()).inDays.toInt());
+    // _daysLeft = DateTime.parse(deathDateLocal).difference(DateTime.now()).inSeconds.toInt();
+    _daysLeft = deathDate.difference(DateTime.now()).inSeconds.toInt();
+    print('I am in initState and _daysLeft is $_daysLeft');
+    _everysecond = Timer.periodic(Duration(seconds: 1), (Timer t) {
       setState(() {
-        _daysLeft = deathDate.difference(DateTime.now()).inDays.toInt();
+        _daysLeft = DateTime.parse(deathDateLocal).difference(DateTime.now()).inSeconds.toInt();
+        // _daysLeft = deathDate.difference(DateTime.now()).inDays.toInt();
+
       });
     });
+    super.initState();
   }
-
-  //https://medium.com/flutter-community/how-to-use-local-storage-in-flutter-3169e34f051b
-  //https://youtu.be/auspHSmtVII
-  //https://pusher.com/tutorials/local-data-flutter
 
   @override
   Widget build(BuildContext context) {
