@@ -209,8 +209,8 @@ class _HabitsInputState extends State<HabitsInput> {
 
               // Print validations
               print('I have been alive $days days');
-              print(deathDate);
-              print(deathDate.toIso8601String());
+              print('This is deathDate $deathDate');
+              print('This is deathDate to Iso ${deathDate.toIso8601String()}');
 
               Navigator.push(
                 context,

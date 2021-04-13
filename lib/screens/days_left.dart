@@ -44,6 +44,7 @@ class _DaysLeftState extends State<DaysLeft> {
   int _daysLeft;
   Timer _everysecond;
 
+
   saveLocalDeathDateData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('deathDateLocal', deathDate.toIso8601String());
@@ -67,21 +68,19 @@ class _DaysLeftState extends State<DaysLeft> {
     prefs.remove('deathDateLocal');
   }
 
-  //https://stackoverflow.com/questions/65124874/using-shared-preferences-in-initstate-of-widget-causes-error
-  //https://www.youtube.com/watch?v=ek8ZPdWj4Qo
-  //https://medium.com/flutterworld/why-future-builder-called-multiple-times-9efeeaf38ba2
+  //https://api.flutter.dev/flutter/widgets/FutureBuilder-class.html
 
   @override
   void initState() {
     saveLocalDeathDateData();
     readAllLocalData();
-    // print(DateTime.parse(deathDateLocal).difference(DateTime.now()).inDays.toInt());
-    // _daysLeft = DateTime.parse(deathDateLocal).difference(DateTime.now()).inSeconds.toInt();
-    _daysLeft = deathDate.difference(DateTime.now()).inSeconds.toInt();
+    print('This is the parsing ${DateTime.parse(deathDateLocal ?? deathDate.toIso8601String()).difference(DateTime.now()).inDays.toInt()}');
+    _daysLeft = DateTime.parse(deathDateLocal ?? deathDate.toIso8601String()).difference(DateTime.now()).inDays.toInt();
+    // _daysLeft = deathDate.difference(DateTime.now()).inSeconds.toInt();
     print('I am in initState and _daysLeft is $_daysLeft');
-    _everysecond = Timer.periodic(Duration(seconds: 1), (Timer t) {
+    _everysecond = Timer.periodic(Duration(hours: 1), (Timer t) {
       setState(() {
-        _daysLeft = DateTime.parse(deathDateLocal).difference(DateTime.now()).inSeconds.toInt();
+        _daysLeft = DateTime.parse(deathDateLocal).difference(DateTime.now()).inDays.toInt();
         // _daysLeft = deathDate.difference(DateTime.now()).inDays.toInt();
 
       });
@@ -93,7 +92,7 @@ class _DaysLeftState extends State<DaysLeft> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // automaticallyImplyLeading: false,
+        automaticallyImplyLeading: false,
         backgroundColor: Color(0xFF303030),
         elevation: 0,
         actions: <Widget>[
