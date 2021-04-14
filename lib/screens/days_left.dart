@@ -1,4 +1,6 @@
 //IMPORT MATERIAL PACKAGES
+import 'dart:ffi';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
@@ -43,14 +45,14 @@ class _DaysLeftState extends State<DaysLeft> {
   String deathDateLocal;
   int _daysLeft;
   Timer _everysecond;
+  Future getLocalData;
+
 
 
   saveLocalDeathDateData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('deathDateLocal', deathDate.toIso8601String());
   }
-
-
 
   readAllLocalData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -68,21 +70,21 @@ class _DaysLeftState extends State<DaysLeft> {
     prefs.remove('deathDateLocal');
   }
 
+calculateDaysLeft(){
+  _daysLeft = DateTime.parse(deathDateLocal).difference(DateTime.now()).inDays.toInt();
+}
+
   //https://api.flutter.dev/flutter/widgets/FutureBuilder-class.html
+  // https://www.youtube.com/watch?v=LYN46233cws
 
   @override
   void initState() {
-    saveLocalDeathDateData();
-    readAllLocalData();
-    print('This is the parsing ${DateTime.parse(deathDateLocal ?? deathDate.toIso8601String()).difference(DateTime.now()).inDays.toInt()}');
-    _daysLeft = DateTime.parse(deathDateLocal ?? deathDate.toIso8601String()).difference(DateTime.now()).inDays.toInt();
-    // _daysLeft = deathDate.difference(DateTime.now()).inSeconds.toInt();
-    print('I am in initState and _daysLeft is $_daysLeft');
-    _everysecond = Timer.periodic(Duration(hours: 1), (Timer t) {
+    // saveLocalDeathDateData();
+    getLocalData = readAllLocalData();
+    _daysLeft = DateTime.parse(deathDateLocal ?? "2062-02-27").difference(DateTime.now()).inDays.toInt();
+    _everysecond = Timer.periodic(Duration(seconds: 1), (Timer t) {
       setState(() {
         _daysLeft = DateTime.parse(deathDateLocal).difference(DateTime.now()).inDays.toInt();
-        // _daysLeft = deathDate.difference(DateTime.now()).inDays.toInt();
-
       });
     });
     super.initState();
@@ -121,19 +123,30 @@ class _DaysLeftState extends State<DaysLeft> {
         ],
       ),
       body: Center(
+        //Future builder here as well
         child: CircularPercentIndicator(
           radius: 200.0,
           lineWidth: 4.0,
-          percent: (days / (days + _daysLeft)),
+          percent: (daysLocal / (daysLocal + _daysLeft)),
           backgroundColor: Colors.transparent,
           progressColor: Color(0xFFa4c2f4),
           center: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                (f.format(_daysLeft)).toString(),
-                style: kDaysCounterTextStyle,
-              ),
+              FutureBuilder(
+                  future: getLocalData,
+                  builder: (context, snapshot){
+                    if(snapshot.connectionState == ConnectionState.done){
+                      return Text(f.format(DateTime.parse(deathDateLocal).difference(DateTime.now()).inDays.toInt()).toString(), style: kDaysCounterTextStyle,);
+                    }
+                    else{
+                      return Text('Coming!');
+                    }
+                  }),
+              // Text(
+              //   (f.format(_daysLeft)).toString(),
+              //   style: kDaysCounterTextStyle,
+              // ),
               Text(
                 'Days left',
                 style: kDaysLeftTextStyle,
