@@ -207,6 +207,11 @@ class _HabitsInputState extends State<HabitsInput> {
 
               saveLocalDaysData();
 
+              saveLocalDeathDateData() async {
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                prefs.setString('deathDateLocal', deathDate.toIso8601String());
+              }
+
               // Print validations
               print('I have been alive $days days');
               print('This is deathDate $deathDate');

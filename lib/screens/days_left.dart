@@ -47,13 +47,6 @@ class _DaysLeftState extends State<DaysLeft> {
   Timer _everysecond;
   Future getLocalData;
 
-
-
-  saveLocalDeathDateData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('deathDateLocal', deathDate.toIso8601String());
-  }
-
   readAllLocalData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     daysLocal = prefs.getDouble('daysLocal');
@@ -61,28 +54,21 @@ class _DaysLeftState extends State<DaysLeft> {
     deathDateLocal = prefs.getString('deathDateLocal');
     print(
         'I am in daysLeft and the locally saved deathDate is $deathDateLocal');
-
+    return deathDateLocal;
   }
 
-  deleteLocalData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.remove('daysLocal');
-    prefs.remove('deathDateLocal');
-  }
-
-calculateDaysLeft(){
-  _daysLeft = DateTime.parse(deathDateLocal).difference(DateTime.now()).inDays.toInt();
-}
 
   //https://api.flutter.dev/flutter/widgets/FutureBuilder-class.html
   // https://www.youtube.com/watch?v=LYN46233cws
 
+
   @override
   void initState() {
-    // saveLocalDeathDateData();
     getLocalData = readAllLocalData();
-    _daysLeft = DateTime.parse(deathDateLocal ?? "2062-02-27").difference(DateTime.now()).inDays.toInt();
-    _everysecond = Timer.periodic(Duration(seconds: 1), (Timer t) {
+    _daysLeft = DateTime.parse(deathDateLocal ?? "2050-03-27").difference(DateTime.now()).inDays.toInt();
+    print('I am in initState after _daysLeft');
+    print(_daysLeft);
+    _everysecond = Timer.periodic(Duration(seconds: 3), (Timer t) {
       setState(() {
         _daysLeft = DateTime.parse(deathDateLocal).difference(DateTime.now()).inDays.toInt();
       });
@@ -103,8 +89,6 @@ calculateDaysLeft(){
                   icon: Icon(Icons.more_horiz),
                   color: Colors.white,
                   onPressed: () {
-                    print(DateTime.parse(deathDateLocal));
-                    // deleteLocalData();
                     showCupertinoModalPopup(
                       context: context,
                       builder: (context) => CupertinoRecalculate(),
@@ -123,38 +107,40 @@ calculateDaysLeft(){
         ],
       ),
       body: Center(
-        //Future builder here as well
-        child: CircularPercentIndicator(
-          radius: 200.0,
-          lineWidth: 4.0,
-          percent: (daysLocal / (daysLocal + _daysLeft)),
-          backgroundColor: Colors.transparent,
-          progressColor: Color(0xFFa4c2f4),
-          center: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              FutureBuilder(
-                  future: getLocalData,
-                  builder: (context, snapshot){
-                    if(snapshot.connectionState == ConnectionState.done){
-                      return Text(f.format(DateTime.parse(deathDateLocal).difference(DateTime.now()).inDays.toInt()).toString(), style: kDaysCounterTextStyle,);
-                    }
-                    else{
-                      return Text('Coming!');
-                    }
-                  }),
-              // Text(
-              //   (f.format(_daysLeft)).toString(),
-              //   style: kDaysCounterTextStyle,
-              // ),
-              Text(
-                'Days left',
-                style: kDaysLeftTextStyle,
+        child: FutureBuilder(
+            future: getLocalData,
+            builder: (BuildContext context, AsyncSnapshot snapshot){
+              // print('This is snapshot $snapshot');
+          if (snapshot.data == null){
+            return CircularProgressIndicator();
+          }
+            return CircularPercentIndicator(
+              radius: 200.0,
+              lineWidth: 4.0,
+              percent: (daysLocal / (daysLocal + _daysLeft)),
+              backgroundColor: Colors.transparent,
+              progressColor: Color(0xFFa4c2f4),
+              center: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  FutureBuilder(
+                      future: getLocalData,
+                      builder: (context, snapshot){
+                        if (snapshot.data == null){
+                          return CircularProgressIndicator();
+                        }
+                          return Text(f.format(_daysLeft).toString(), style: kDaysCounterTextStyle,);
+                      }),
+                  Text(
+                    'Days left',
+                    style: kDaysLeftTextStyle,
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
+            );
+        }),
       ),
     );
   }
 }
+
