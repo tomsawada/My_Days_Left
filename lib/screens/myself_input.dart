@@ -93,6 +93,7 @@ class _MyselfInputState extends State<MyselfInput> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(
           'About me 1/3',
           style: kTitleStyle,

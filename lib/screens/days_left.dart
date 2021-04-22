@@ -1,6 +1,5 @@
 //IMPORT MATERIAL PACKAGES
 import 'dart:ffi';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
@@ -8,6 +7,8 @@ import 'dart:async';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io' show Platform;
+//IMPORT SCREENS
+import 'package:days_left/screens/myself_input.dart';
 //IMPORT UI ELEMENTS
 import 'package:days_left/ui_elements/material_elements.dart';
 import 'package:days_left/ui_elements/cupertino_elements.dart';
@@ -18,8 +19,7 @@ import 'package:days_left/ui_elements/constants.dart';
 // IF user has certain values, then main.dart should send directly over here. But if user doesn't have certain values,
 // then main.dart should send to the start of the process. When user recalculates, all variables are deleted,
 // hence applying option 2
-//TODO: deathDateLocal must be parse to continue with the calculation
-// And if the user closes the app and then re-opens, the calculation must be able to continue running.
+
 
 enum Option { recalculate }
 
@@ -57,10 +57,18 @@ class _DaysLeftState extends State<DaysLeft> {
     return deathDateLocal;
   }
 
-
-  //https://api.flutter.dev/flutter/widgets/FutureBuilder-class.html
-  // https://www.youtube.com/watch?v=LYN46233cws
-
+  void androidRecalculate(choice, BuildContext context){
+    setState(() {
+      if(choice == Option.recalculate){
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) {
+            return MyselfInput();
+          },
+        ),
+        );
+      }
+    });
+  }
 
   @override
   void initState() {
@@ -68,10 +76,15 @@ class _DaysLeftState extends State<DaysLeft> {
     _daysLeft = DateTime.parse(deathDateLocal ?? "2050-03-27").difference(DateTime.now()).inDays.toInt();
     print('I am in initState after _daysLeft');
     print(_daysLeft);
-    _everysecond = Timer.periodic(Duration(seconds: 3), (Timer t) {
-      setState(() {
-        _daysLeft = DateTime.parse(deathDateLocal).difference(DateTime.now()).inDays.toInt();
-      });
+    _everysecond = Timer.periodic(Duration(milliseconds: 1), (Timer t) {
+      if(mounted) {
+        setState(() {
+          _daysLeft = DateTime.parse(deathDateLocal)
+              .difference(DateTime.now())
+              .inDays
+              .toInt();
+        });
+      }
     });
     super.initState();
   }
@@ -95,12 +108,12 @@ class _DaysLeftState extends State<DaysLeft> {
                     );
                   })
               : PopupMenuButton<Option>(
+            onSelected: (choice)=>androidRecalculate(choice, context),
                   itemBuilder: (BuildContext context) =>
                       <PopupMenuEntry<Option>>[
                     const PopupMenuItem<Option>(
                       value: Option.recalculate,
                       child: Text('Recalculate'),
-                      // TODO: Erase the calculations and get back to the beginning.
                     ),
                   ],
                 ),

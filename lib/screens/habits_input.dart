@@ -31,6 +31,7 @@ class _HabitsInputState extends State<HabitsInput> {
   int drink = 2;
   int smoke = 20;
 
+
   exerciseLifeCalculator() {
     return (((exercise * 2 * 52) / 24) * lifeExpectancyAfterHealth) / 365.25;
   }
@@ -209,9 +210,9 @@ class _HabitsInputState extends State<HabitsInput> {
 
               saveLocalDeathDateData() async {
                 SharedPreferences prefs = await SharedPreferences.getInstance();
-                prefs.setString('deathDateLocal', deathDate.toIso8601String());
+                prefs.setString('deathDateLocal', deathDate.toIso8601String().substring(0,10));
               }
-
+              saveLocalDeathDateData();
               // Print validations
               print('I have been alive $days days');
               print('This is deathDate $deathDate');

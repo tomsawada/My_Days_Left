@@ -1,3 +1,4 @@
+import 'package:days_left/screens/myself_input.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -35,8 +36,13 @@ class CupertinoRecalculate extends StatelessWidget {
       actions: [
         CupertinoActionSheetAction(
           onPressed: () {
-            // TODO: Erase the calculations and get back to the beginning.
-            // Here goes the recalculation /**/
+            Navigator.push(context, MaterialPageRoute(
+                builder: (context) {
+              return MyselfInput();
+            },
+            ),
+            );
+
           },
           child: Text('Recalculate'),
           isDestructiveAction: true,
