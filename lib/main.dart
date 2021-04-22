@@ -1,17 +1,39 @@
 //IMPORT MATERIAL PACKAGES
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 //IMPORT SCREENS
 import 'package:days_left/screens/days_left.dart';
 import 'package:days_left/screens/myself_input.dart';
+import 'package:days_left/screens/health_input.dart';
 
 void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+class MyApp extends StatefulWidget {
+
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  String deathDateLocal;
+
+  @override
+  void initState(){
+    super.initState();
+    checkHasData();
+  }
+
+  checkHasData() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    deathDateLocal = prefs.get("deathDateLocal");
+    return deathDateLocal;
+  }
+
   @override
   Widget build(BuildContext context) {
+    print(deathDateLocal);
     return MaterialApp(
       theme: ThemeData.dark().copyWith(
         sliderTheme: SliderTheme.of(context).copyWith(
@@ -23,7 +45,8 @@ class MyApp extends StatelessWidget {
           overlayShape: RoundSliderOverlayShape(overlayRadius: 20.0),
         ),
       ),
-      home: MyselfInput(),
+      //TODO: FutureBuilder Here
+      home: deathDateLocal == null ? MyselfInput() : DaysLeft(),
     );
   }
 }

@@ -119,8 +119,8 @@ class _HealthInputState extends State<HealthInput> {
                               child: Transform.rotate(
                                 angle: _movement,
                                 child: Container(
-                                  height: radius * 2,
-                                  width: radius * 2,
+                                  height: MediaQuery.of(context).size.height > 700 ? radius * 2 : radius * 1.8,
+                                  width: MediaQuery.of(context).size.height > 700 ? radius * 2 : radius * 1.8,
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     image: DecorationImage(
@@ -170,8 +170,8 @@ class _HealthInputState extends State<HealthInput> {
                               child: Transform.rotate(
                                 angle: _movements,
                                 child: Container(
-                                  height: radius * 2,
-                                  width: radius * 2,
+                                  height: MediaQuery.of(context).size.height > 700 ? radius * 2 : radius * 1.8,
+                                  width: MediaQuery.of(context).size.height > 700 ? radius * 2 : radius * 1.8,
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     image: DecorationImage(
