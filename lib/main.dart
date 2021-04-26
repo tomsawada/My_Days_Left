@@ -18,18 +18,20 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String deathDateLocal;
-
-  @override
-  void initState(){
-    super.initState();
-    checkHasData();
-  }
+  Future myFuture;
 
   checkHasData() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     deathDateLocal = prefs.get("deathDateLocal");
     return deathDateLocal;
   }
+
+  @override
+  void initState(){
+    super.initState();
+    myFuture = checkHasData();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -45,8 +47,15 @@ class _MyAppState extends State<MyApp> {
           overlayShape: RoundSliderOverlayShape(overlayRadius: 20.0),
         ),
       ),
-      //TODO: FutureBuilder Here
-      home: deathDateLocal == null ? MyselfInput() : DaysLeft(),
+      home: FutureBuilder(
+          future: myFuture,
+          builder: (BuildContext context, AsyncSnapshot snapshot){
+            if(snapshot.data == null){
+              return MyselfInput();
+            }
+            return DaysLeft();
+          }
+    ),
     );
   }
 }

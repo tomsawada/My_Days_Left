@@ -15,11 +15,6 @@ import 'package:days_left/ui_elements/cupertino_elements.dart';
 import 'package:days_left/ui_elements/android_elements.dart';
 import 'package:days_left/ui_elements/constants.dart';
 
-//TODO: Make this view the default view until user goes to recalculate
-// IF user has certain values, then main.dart should send directly over here. But if user doesn't have certain values,
-// then main.dart should send to the start of the process. When user recalculates, all variables are deleted,
-// hence applying option 2
-
 
 enum Option { recalculate }
 

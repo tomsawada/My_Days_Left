@@ -46,7 +46,7 @@ class _HabitsInputState extends State<HabitsInput> {
     } else if (drink <= 2) {
       return 1.15;
     } else if (drink <= 4) {
-      return 0;
+      return 1;
     } else if (drink <= 7) {
       return 0.9;
     } else {
@@ -214,6 +214,14 @@ class _HabitsInputState extends State<HabitsInput> {
               }
               saveLocalDeathDateData();
               // Print validations
+              // print(lifeExpectancyAfterHealth);
+              // print(exerciseLifeCalculator());
+              // print(smokeLifeCalculator());
+              // print(drinkLifeCalculator());
+              // print(calculateLifeExpectancyAfterHabits());
+              // print(lifeExpectancyAfterHabits);
+              // print(remainingDays);
+              // print(DateTime.now().add(Duration(days: remainingDays)));
               print('I have been alive $days days');
               print('This is deathDate $deathDate');
               print('This is deathDate to Iso ${deathDate.toIso8601String()}');
