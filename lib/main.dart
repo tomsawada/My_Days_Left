@@ -4,7 +4,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 //IMPORT SCREENS
 import 'package:days_left/screens/days_left.dart';
 import 'package:days_left/screens/myself_input.dart';
-import 'package:days_left/screens/health_input.dart';
 
 void main() {
   runApp(MyApp());

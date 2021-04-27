@@ -1,5 +1,4 @@
 //IMPORT MATERIAL PACKAGES
-import 'dart:ffi';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
@@ -10,9 +9,7 @@ import 'dart:io' show Platform;
 //IMPORT SCREENS
 import 'package:days_left/screens/myself_input.dart';
 //IMPORT UI ELEMENTS
-import 'package:days_left/ui_elements/material_elements.dart';
 import 'package:days_left/ui_elements/cupertino_elements.dart';
-import 'package:days_left/ui_elements/android_elements.dart';
 import 'package:days_left/ui_elements/constants.dart';
 
 

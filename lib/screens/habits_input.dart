@@ -6,8 +6,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'days_left.dart';
 //IMPORT UI ELEMENTS
 import 'package:days_left/ui_elements/material_elements.dart';
-import 'package:days_left/ui_elements/cupertino_elements.dart';
-import 'package:days_left/ui_elements/android_elements.dart';
 import 'package:days_left/ui_elements/constants.dart';
 
 class HabitsInput extends StatefulWidget {
