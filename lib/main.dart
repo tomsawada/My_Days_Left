@@ -36,6 +36,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     print(deathDateLocal);
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData.dark().copyWith(
         sliderTheme: SliderTheme.of(context).copyWith(
           activeTrackColor: Color(0xFFECEFF1), //Colors.blueGrey[50]
